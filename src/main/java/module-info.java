@@ -8,4 +8,6 @@ module com.example.hescoin {
 
     opens com.example.hescoin to javafx.fxml;
     exports com.example.hescoin;
+    exports com.example.hescoin.Data;
+    opens com.example.hescoin.Data to javafx.fxml;
 }

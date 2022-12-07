@@ -1,5 +1,4 @@
-package com.example.hescoin.model;
-
+package com.example.hescoin.Model;
 
 import sun.security.provider.DSAPublicKeyImpl;
 
@@ -108,3 +107,4 @@ public class Transaction implements Serializable {
     }
 
 }
+

@@ -1,4 +1,4 @@
-package com.example.hescoin.model;
+package com.example.hescoin.Model;
 
 
 import java.io.Serializable;
