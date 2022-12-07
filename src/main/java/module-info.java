@@ -4,6 +4,7 @@ module com.example.hescoin {
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
+    requires java.sql;
 
     opens com.example.hescoin to javafx.fxml;
     exports com.example.hescoin;
