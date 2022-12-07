@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextField layoutX="30.0" layoutY="351.0" prefHeight="25.0" prefWidth="201.0" />
+      <Button layoutX="487.0" layoutY="351.0" mnemonicParsing="false" text="refresh" />
+      <TextField layoutX="256.0" layoutY="351.0" prefHeight="25.0" prefWidth="201.0" />
+      <Label layoutX="30.0" layoutY="319.0" text="Your balance :">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="256.0" layoutY="319.0" text="Your public key :">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TableView layoutX="3.0" layoutY="86.0" prefHeight="218.0" prefWidth="593.0">
+        <columns>
+          <TableColumn prefWidth="94.0" text="FROM" />
+          <TableColumn prefWidth="93.0" text="TO" />
+            <TableColumn prefWidth="104.0" text="VALUE" />
+            <TableColumn prefWidth="153.0" text="SIGNATURE" />
+            <TableColumn prefWidth="148.0" text="CREATED ON" />
+        </columns>
+      </TableView>
+      <Label layoutX="188.0" layoutY="44.0" text="Current block transaction">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

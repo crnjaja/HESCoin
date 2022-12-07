@@ -1,10 +1,12 @@
 package com.example.hescoin;
 
+import com.example.hescoin.Threads.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.sql.*;
 
 public class HEScoin extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
         new UI().start(stage);
