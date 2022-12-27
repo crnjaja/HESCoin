@@ -1,5 +1,6 @@
 package com.example.hescoin;
 
+
 import com.example.hescoin.Threads.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -10,10 +11,9 @@ public class HEScoin extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         new UI().start(stage);
-        new PearClient().start();
-        new PearServer(6000).start();
+        new PeerClient().start();
+        new PeerServer(6000).start();
         new MiningThread().start();
-
     }
 
     public static void main(String[] args) {
@@ -21,6 +21,7 @@ public class HEScoin extends Application {
         launch(args);
 
     }
+
 
     public void init() {
         try {
