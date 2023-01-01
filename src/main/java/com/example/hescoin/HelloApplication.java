@@ -40,7 +40,7 @@ public class HelloApplication extends Application {
             //This creates your wallet if there is none and gives you a KeyPair.
             //We will create it in separate db for better security and ease of portability.
             Connection walletConnection = DriverManager
-                    .getConnection("jdbc:sqlite:C:\\Users\\spiro\\IdeaProjects\\e-coin\\db\\wallet.db");
+                    .getConnection("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\wallet.db");
             Statement walletStatment = walletConnection.createStatement();
             walletStatment.executeUpdate("CREATE TABLE IF NOT EXISTS WALLET ( " +
                     " PRIVATE_KEY BLOB NOT NULL UNIQUE, " +
@@ -67,7 +67,7 @@ public class HelloApplication extends Application {
 
 //          This will create the db tables with columns for the Blockchain.
             Connection blockchainConnection = DriverManager
-                    .getConnection("jdbc:sqlite:C:\\Users\\spiro\\IdeaProjects\\e-coin\\db\\blockchain.db");
+                    .getConnection("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
             Statement blockchainStmt = blockchainConnection.createStatement();
             blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS BLOCKCHAIN ( " +
                     " ID INTEGER NOT NULL UNIQUE, " +
