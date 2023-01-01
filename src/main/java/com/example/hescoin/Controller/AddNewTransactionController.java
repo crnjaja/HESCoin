@@ -26,17 +26,15 @@ public class AddNewTransactionController {
     private TextField value ;
 
     @FXML
-    public void createNewTransaction() throws GeneralSecurityException{
+    public void createNewTransaction() throws GeneralSecurityException {
         Base64.Decoder decoder = Base64.getDecoder();
         Signature signing = Signature.getInstance("SHA256withDSA");
-        Integer ledgerID = BlockchainData.getInstance().getTransactionLedgerFX();
-        byte[] sendB = decoder.decode((toAddress.getText()));
+        Integer ledgerId = BlockchainData.getInstance().getTransactionLedgerFX().get(0).getLedgerId();
+        byte[] sendB = decoder.decode(toAddress.getText());
         Transaction transaction = new Transaction(WalletData.getInstance()
-                .getWallet(), sendB, Integer.parseInt(value.getText()), ledgerID, signing);
-        BlockchainData.getInstance().addTransaction(transaction, false);
+                .getWallet(),sendB ,Integer.parseInt(value.getText()), ledgerId, signing);
+        BlockchainData.getInstance().addTransaction(transaction,false);
         BlockchainData.getInstance().addTransactionState(transaction);
     }
-
-
 
 }
