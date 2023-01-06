@@ -40,7 +40,7 @@ public class HelloApplication extends Application {
             //This creates your wallet if there is none and gives you a KeyPair.
             //We will create it in separate db for better security and ease of portability.
             Connection walletConnection = DriverManager
-                    .getConnection("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\wallet.db");
+                    .getConnection("jdbc:sqlite:db\\wallet.db");
             Statement walletStatment = walletConnection.createStatement();
             walletStatment.executeUpdate("CREATE TABLE IF NOT EXISTS WALLET ( " +
                     " PRIVATE_KEY BLOB NOT NULL UNIQUE, " +
@@ -67,7 +67,7 @@ public class HelloApplication extends Application {
 
 //          This will create the db tables with columns for the Blockchain.
             Connection blockchainConnection = DriverManager
-                    .getConnection("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                    .getConnection("jdbc:sqlite:db\\blockchain.db");
             Statement blockchainStmt = blockchainConnection.createStatement();
             blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS BLOCKCHAIN ( " +
                     " ID INTEGER NOT NULL UNIQUE, " +
@@ -88,7 +88,7 @@ public class HelloApplication extends Application {
                 firstBlock.setMinedBy(WalletData.getInstance().getWallet().getPublicKey().getEncoded());
                 firstBlock.setTimeStamp(LocalDateTime.now().toString());
                 //helper class.
-                Signature signing = Signature.getInstance("SHA256withDSA");
+                Signature signing = Signature.getInstance("SHA256withRSA");
                 signing.initSign(WalletData.getInstance().getWallet().getPrivateKey());
                 signing.update(firstBlock.toString().getBytes());
                 firstBlock.setCurrHash(signing.sign());
@@ -104,12 +104,12 @@ public class HelloApplication extends Application {
                 pstmt.setInt(6, firstBlock.getMiningPoints());
                 pstmt.setDouble(7, firstBlock.getLuck());
                 pstmt.executeUpdate();
-                Signature transSignature = Signature.getInstance("SHA256withDSA");
+                Signature transSignature = Signature.getInstance("SHA256withRSA");
                 initBlockRewardTransaction = new Transaction(WalletData.getInstance().getWallet(),WalletData.getInstance().getWallet().getPublicKey().getEncoded(),100,1,transSignature);
             }
             resultSetBlockchain.close();
 
-            blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS TRANSACTIONS ( " +
+            blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS TRANSACTION ( " +
                     " ID INTEGER NOT NULL UNIQUE, " +
                     " \"FROM\" BLOB, " +
                     " \"TO\" BLOB, " +

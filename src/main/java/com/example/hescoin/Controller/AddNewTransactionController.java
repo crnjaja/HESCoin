@@ -28,7 +28,7 @@ public class AddNewTransactionController {
     @FXML
     public void createNewTransaction() throws GeneralSecurityException {
         Base64.Decoder decoder = Base64.getDecoder();
-        Signature signing = Signature.getInstance("SHA256withDSA");
+        Signature signing = Signature.getInstance("SHA256withRSA");
         Integer ledgerId = BlockchainData.getInstance().getTransactionLedgerFX().get(0).getLedgerId();
         byte[] sendB = decoder.decode(toAddress.getText());
         Transaction transaction = new Transaction(WalletData.getInstance()

@@ -1,11 +1,14 @@
 package com.example.hescoin.Model;
 
-import sun.security.provider.DSAPublicKeyImpl;
-
 import java.io.Serializable;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -47,8 +50,10 @@ public class Block implements Serializable {
     }
 
     public Boolean isVerified(Signature signing)
-            throws InvalidKeyException, SignatureException {
-        signing.initVerify(new DSAPublicKeyImpl(this.minedBy));
+            throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, InvalidKeySpecException {
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(this.minedBy));
+        signing.initVerify(publicKey);
         signing.update(this.toString().getBytes());
         return signing.verify(this.currHash);
     }
@@ -101,6 +106,7 @@ public class Block implements Serializable {
                 ", ledgerId=" + ledgerId +
                 ", miningPoints=" + miningPoints +
                 ", luck=" + luck +
+                ", transactionLedger=" + transactionLedger +
                 '}';
     }
 }

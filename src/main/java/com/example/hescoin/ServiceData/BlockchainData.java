@@ -4,8 +4,8 @@ package com.example.hescoin.ServiceData;
 import com.example.hescoin.Model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sun.security.provider.DSAPublicKeyImpl;
-
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.security.*;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class BlockchainData {
     private static final int TIMEOUT_INTERVAL = 65;
     private static final int MINING_INTERVAL = 60;
     //helper class.
-    private Signature signing = Signature.getInstance("SHA256withDSA");
+    private Signature signing = Signature.getInstance("SHA256withRSA");
 
     //singleton class
     private static BlockchainData instance;
@@ -100,14 +100,16 @@ public class BlockchainData {
         newBlockTransactions.sort(transactionComparator);
     }
 
+
+
     public void addTransaction(Transaction transaction, boolean blockReward) throws GeneralSecurityException {
         try {
-            if (getBalance(currentBlockChain, newBlockTransactions,
-                    new DSAPublicKeyImpl(transaction.getFrom())) < transaction.getValue() && !blockReward) {
+            PublicKey fromKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(transaction.getFrom()));
+            if (getBalance(currentBlockChain, newBlockTransactions, fromKey) < transaction.getValue() && !blockReward) {
                 throw new GeneralSecurityException("Not enough funds by sender to record transaction");
             } else {
                 Connection connection = DriverManager.getConnection
-                        ("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                        ("jdbc:sqlite:db\\blockchain.db");
 
                 PreparedStatement pstmt;
                 pstmt = connection.prepareStatement("INSERT INTO TRANSACTIONS" +
@@ -128,13 +130,23 @@ public class BlockchainData {
             System.out.println("Problem with DB: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public void loadBlockChain() {
         try {
             Connection connection = DriverManager.getConnection
-                    ("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                    ("jdbc:sqlite:db\\blockchain.db");
             Statement stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(" SELECT * FROM BLOCKCHAIN ");
             while (resultSet.next()) {
@@ -172,7 +184,7 @@ public class BlockchainData {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection
-                    ("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                    ("jdbc:sqlite:db\\blockchain.db");
             PreparedStatement stmt = connection.prepareStatement
                     (" SELECT  * FROM TRANSACTIONS WHERE LEDGER_ID = ?");
             stmt.setInt(1, ledgerID);
@@ -229,7 +241,7 @@ public class BlockchainData {
     private void addBlock(Block block) {
         try {
             Connection connection = DriverManager.getConnection
-                    ("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                    ("jdbc:sqlite:db\\blockchain.db");
             PreparedStatement pstmt;
             pstmt = connection.prepareStatement
                     ("INSERT INTO BLOCKCHAIN(PREVIOUS_HASH, CURRENT_HASH, LEDGER_ID, CREATED_ON," +
@@ -253,7 +265,7 @@ public class BlockchainData {
     private void replaceBlockchainInDatabase(LinkedList<Block> receivedBC) {
         try {
             Connection connection = DriverManager.getConnection
-                    ("jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\blockchain.db");
+                    ("jdbc:sqlite:db\\blockchain.db");
             Statement clearDBStatement = connection.createStatement();
             clearDBStatement.executeUpdate(" DELETE FROM BLOCKCHAIN ");
             clearDBStatement.executeUpdate(" DELETE FROM TRANSACTIONS ");

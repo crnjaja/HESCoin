@@ -1,11 +1,17 @@
 package com.example.hescoin.Model;
 
-import sun.security.provider.DSAPublicKeyImpl;
-
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
@@ -37,9 +43,10 @@ public class Transaction implements Serializable {
         this.ledgerId = ledgerId;
         this.timestamp = timeStamp;
     }
+
     //Constructor for creating a new transaction and signing it.
     public Transaction (Wallet fromWallet, byte[] toAddress, Integer value, Integer ledgerId,
-                        Signature signing) throws InvalidKeyException, SignatureException {
+                        Signature signing) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException {
         Base64.Encoder encoder = Base64.getEncoder();
         this.from = fromWallet.getPublicKey().getEncoded();
         this.fromFX = encoder.encodeToString(fromWallet.getPublicKey().getEncoded());
@@ -48,19 +55,25 @@ public class Transaction implements Serializable {
         this.value = value;
         this.ledgerId = ledgerId;
         this.timestamp = LocalDateTime.now().toString();
-        signing.initSign(fromWallet.getPrivateKey());
+        signing.initSign(fromWallet.getPrivateKey(), SecureRandom.getInstanceStrong());
         String sr = this.toString();
         signing.update(sr.getBytes());
         this.signature = signing.sign();
         this.signatureFX = encoder.encodeToString(this.signature);
     }
 
+
+
     public Boolean isVerified(Signature signing)
-            throws InvalidKeyException, SignatureException {
-        signing.initVerify(new DSAPublicKeyImpl(this.getFrom()));
+            throws InvalidKeyException, SignatureException, InvalidKeySpecException, NoSuchAlgorithmException {
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(this.getFrom());
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
+        signing.initVerify(publicKey);
         signing.update(this.toString().getBytes());
         return signing.verify(this.signature);
     }
+
 
     @Override
     public String toString() {
@@ -92,19 +105,26 @@ public class Transaction implements Serializable {
     public String getToFX() { return toFX; }
     public String getSignatureFX() { return signatureFX; }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Transaction)) return false;
         Transaction that = (Transaction) o;
-        return Arrays.equals(getSignature(), that.getSignature());
+        return Arrays.equals(from, that.from) &&
+                Arrays.equals(to, that.to) &&
+                value.equals(that.value) &&
+                timestamp.equals(that.timestamp) &&
+                ledgerId.equals(that.ledgerId);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(getSignature());
+        int result = Arrays.hashCode(from);
+        result = 31 * result + Arrays.hashCode(to);
+        result = 31 * result + value.hashCode();
+        result = 31 * result + timestamp.hashCode();
+        result = 31 * result + ledgerId.hashCode();
+        return result;
     }
 
 }
-

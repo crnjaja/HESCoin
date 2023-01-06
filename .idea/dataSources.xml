@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="blockchain" uuid="f954a2d0-9929-49e5-91a5-f8d0512df207">
+    <data-source source="LOCAL" name="BlockChain.sqlite" uuid="3f6e1fb9-5ff4-43e0-9dbd-3fe2ae29e8cb">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:db\BlockChain.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="wallet.sqlite" uuid="4801c812-d102-49fe-966d-93e0e2ab3efc">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:db\wallet.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="blockchain" uuid="c5cbfc6e-e962-4d06-a68a-99da0ad2412b">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
@@ -13,7 +27,7 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="wallet" uuid="efebe618-556a-4f74-ae53-6f72c1a52327">
+    <data-source source="LOCAL" name="wallet" uuid="08506210-ead3-4950-ba67-8adc28c34166">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

@@ -1,5 +1,6 @@
 package com.example.hescoin.Threads;
 
+import com.example.hescoin.HelloApplication;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +15,8 @@ public class UI extends Application {
     public void start(Stage stage) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("../View/MainWindow.fxml"));
+            
+            root = FXMLLoader.load(HelloApplication.class.getResource("MainWindow.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

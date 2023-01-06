@@ -26,11 +26,11 @@ public class WalletData {
     //This will load your wallet from the database.
     public void loadWallet() throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
         Connection walletConnection = DriverManager.getConnection(
-                "jdbc:sqlite:C:\\Users\\41788\\IdeaProjects\\HESCoin\\db\\wallet.db");
+                "jdbc:sqlite:db\\wallet.db");
         Statement walletStatment = walletConnection.createStatement();
         ResultSet resultSet;
         resultSet = walletStatment.executeQuery(" SELECT * FROM WALLET ");
-        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PublicKey pub2 = null;
         PrivateKey prv2 = null;
         while (resultSet.next()) {
