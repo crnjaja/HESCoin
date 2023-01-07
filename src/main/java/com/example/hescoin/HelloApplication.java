@@ -23,7 +23,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws Exception {
         new UI().start(stage);
         new PeerClient().start();
-        new PeerServer(6000).start();
+        new PeerServer(65001).start();
         new MiningThread().start();
     }
 
@@ -109,7 +109,7 @@ public class HelloApplication extends Application {
             }
             resultSetBlockchain.close();
 
-            blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS TRANSACTION ( " +
+            blockchainStmt.executeUpdate("CREATE TABLE IF NOT EXISTS TRANSACTIONS ( " +
                     " ID INTEGER NOT NULL UNIQUE, " +
                     " \"FROM\" BLOB, " +
                     " \"TO\" BLOB, " +
