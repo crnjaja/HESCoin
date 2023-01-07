@@ -1,5 +1,6 @@
 package com.example.hescoin.Controller;
 
+import com.example.hescoin.HelloApplication;
 import com.example.hescoin.Model.Transaction;
 import com.example.hescoin.ServiceData.BlockchainData;
 import com.example.hescoin.ServiceData.WalletData;
@@ -58,7 +59,7 @@ public class MainWindowController {
         Dialog<ButtonType> newTransactionController = new Dialog<>();
         newTransactionController.initOwner(borderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("../View/AddNewTransactionWindow.fxml"));
+        fxmlLoader.setLocation(HelloApplication.class.getResource("AddNewTransaction.fxml"));
         try {
             newTransactionController.getDialogPane().setContent(fxmlLoader.load());
         } catch (IOException e) {
