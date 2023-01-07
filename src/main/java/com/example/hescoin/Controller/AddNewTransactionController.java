@@ -19,8 +19,6 @@ public class AddNewTransactionController {
 
 
     @FXML
-    private DialogPane dialogPanePane;
-    @FXML
     private TextField toAddress;
     @FXML
     private TextField value ;

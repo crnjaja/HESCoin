@@ -3,20 +3,21 @@ package com.example.hescoin.Controller;
 import com.example.hescoin.Model.Transaction;
 import com.example.hescoin.ServiceData.BlockchainData;
 import com.example.hescoin.ServiceData.WalletData;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.util.Base64;
+import java.util.Optional;
 
 public class MainWindowController {
 
     @FXML
-    public TableView<Transaction> tableView = new TableView<>();
+    public TableView<Transaction> tableview = new TableView<>(); //this is read-only UI table
     @FXML
     private TableColumn<Transaction, String> from;
     @FXML
@@ -34,33 +35,55 @@ public class MainWindowController {
     @FXML
     private TextArea publicKey;
 
-    public void initialize(){
-        // la key est convertie en un string
+    public void initialize() {
         Base64.Encoder encoder = Base64.getEncoder();
-        from.setCellValueFactory(new PropertyValueFactory<>("fromFX"));
-        to.setCellValueFactory(new PropertyValueFactory("toFX"));
-        value.setCellValueFactory(new PropertyValueFactory<>("value"));
-        signature.setCellValueFactory(new PropertyValueFactory<>("signatureFX"));
-        timestamp.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
-
+        from.setCellValueFactory(
+                new PropertyValueFactory<>("fromFX"));
+        to.setCellValueFactory(
+                new PropertyValueFactory<>("toFX"));
+        value.setCellValueFactory(
+                new PropertyValueFactory<>("value"));
+        signature.setCellValueFactory(
+                new PropertyValueFactory<>("signatureFX"));
+        timestamp.setCellValueFactory(
+                new PropertyValueFactory<>("timestamp"));
         eCoins.setText(BlockchainData.getInstance().getWalletBallanceFX());
         publicKey.setText(encoder.encodeToString(WalletData.getInstance().getWallet().getPublicKey().getEncoded()));
-
-        tableView.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
-        // le cursor est sur la 1ere ligne
-        tableView.getSelectionModel().select(0);
-
-
-    }
-    public void toNewTransactionController(){
-
-    }
-    public void refresh(){
-
-    }
-    public void handleExit(){
-
+        tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
+        tableview.getSelectionModel().select(0);
     }
 
+    @FXML
+    public void toNewTransactionController() {
+        Dialog<ButtonType> newTransactionController = new Dialog<>();
+        newTransactionController.initOwner(borderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("../View/AddNewTransactionWindow.fxml"));
+        try {
+            newTransactionController.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            System.out.println("Cant load dialog");
+            e.printStackTrace();
+            return;
+        }
+        newTransactionController.getDialogPane().getButtonTypes().add(ButtonType.FINISH);
+        Optional<ButtonType> result = newTransactionController.showAndWait();
+        if (result.isPresent() ) {
+            tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
+            eCoins.setText(BlockchainData.getInstance().getWalletBallanceFX());
+        }
+    }
 
+    @FXML
+    public void refresh() {
+        tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
+        tableview.getSelectionModel().select(0);
+        eCoins.setText(BlockchainData.getInstance().getWalletBallanceFX());
+    }
+
+    @FXML
+    public void handleExit() {
+        BlockchainData.getInstance().setExit(true);
+        Platform.exit();
+    }
 }
